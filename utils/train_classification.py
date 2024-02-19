@@ -41,14 +41,17 @@ if opt.dataset_type == 'shapenet':
     dataset = ShapeNetDataset(
         root=opt.dataset,
         classification=True,
-        npoints=opt.num_points)
+        npoints=opt.num_points,
+        sampling_method='fps')
 
     test_dataset = ShapeNetDataset(
         root=opt.dataset,
         classification=True,
         split='test',
         npoints=opt.num_points,
-        data_augmentation=False)
+        data_augmentation=False,
+        sampling_method='fps')
+
 elif opt.dataset_type == 'modelnet40':
     dataset = ModelNetDataset(
         root=opt.dataset,

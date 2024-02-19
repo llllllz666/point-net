@@ -60,7 +60,8 @@ class ShapeNetDataset(data.Dataset):
                  classification=False,
                  class_choice=None,
                  split='train',
-                 data_augmentation=True):
+                 data_augmentation=True,
+                 sampling_method='fps'):
         self.npoints = npoints
         self.root = root
         self.catfile = os.path.join(self.root, 'synsetoffset2category.txt')
@@ -68,6 +69,7 @@ class ShapeNetDataset(data.Dataset):
         self.data_augmentation = data_augmentation
         self.classification = classification
         self.seg_classes = {}
+        self.sampling_method = sampling_method
         
         with open(self.catfile, 'r') as f:
             for line in f:
@@ -106,6 +108,57 @@ class ShapeNetDataset(data.Dataset):
         self.num_seg_classes = self.seg_classes[list(self.cat.keys())[0]]
         print(self.seg_classes, self.num_seg_classes)
 
+    def voxel_grid_downsample(self, point_set, voxel_size):
+        """
+        Downsample a point cloud using a voxel grid filter.
+
+        Parameters:
+            point_set (np.array): The original set of points (NxD, where N is the number
+                                  of points and D is the dimensionality, D=3 for point clouds).
+            voxel_size (float): The side length of each voxel in the grid.
+
+        Returns:
+            np.array: The downsampled set of points.
+        """
+        # 计算每个点在网格中的索引
+        indices = np.floor(point_set / voxel_size).astype(np.int32)
+
+        # 将索引转换为唯一的字符串形式，以便可以使用numpy的unique函数
+        indices_str = indices.astype(str)
+        unique_indices_str, unique_inverse = np.unique(['_'.join(item) for item in indices_str], return_inverse=True)
+
+        # 使用平均值或任意点简化每个体素内的点
+        downsampled_points = np.array(
+            [point_set[unique_inverse == i].mean(axis=0) for i in range(len(unique_indices_str))])
+
+        return downsampled_points
+
+    def farthest_point_sampling(self, point_set, num_samples):
+        """
+        Farthest Point Sampling (FPS) algorithm for subsampling a point cloud.
+
+        Parameters:
+            point_set (np.array): The original set of points (NxD, where N is the number
+                                  of points and D is the dimensionality).
+            num_samples (int): The number of points to sample.
+
+        Returns:
+            np.array: The subsampled set of points (num_samplesxD).
+        """
+        N, D = point_set.shape
+        sampled_indices = np.zeros(num_samples, dtype=np.int64)
+        distances = np.full(N, np.inf)
+        farthest = np.random.randint(0, N)
+
+        for i in range(num_samples):
+            sampled_indices[i] = farthest
+            centroid = point_set[farthest, :]
+            new_distances = np.sum((point_set - centroid) ** 2, axis=1)
+            distances = np.minimum(distances, new_distances)
+            farthest = np.argmax(distances)
+
+        return point_set[sampled_indices, :]
+
     def __getitem__(self, index):
         fn = self.datapath[index]
         cls = self.classes[self.datapath[index][0]]
@@ -113,9 +166,13 @@ class ShapeNetDataset(data.Dataset):
         seg = np.loadtxt(fn[2]).astype(np.int64)
         #print(point_set.shape, seg.shape)
 
-        choice = np.random.choice(len(seg), self.npoints, replace=True)
-        #resample
-        point_set = point_set[choice, :]
+        if self.sampling_method == 'voxel_grid':
+            point_set = self.voxel_grid_downsample(point_set, voxel_size=0.05)
+        elif self.sampling_method == 'fps':
+            point_set = self.farthest_point_sampling(point_set, self.npoints)
+        elif self.sampling_method == 'random':
+            choice = np.random.choice(len(point_set), self.npoints, replace=True)
+            point_set = point_set[choice, :]
 
         point_set = point_set - np.expand_dims(np.mean(point_set, axis = 0), 0) # center
         dist = np.max(np.sqrt(np.sum(point_set ** 2, axis = 1)),0)
@@ -127,9 +184,9 @@ class ShapeNetDataset(data.Dataset):
             point_set[:,[0,2]] = point_set[:,[0,2]].dot(rotation_matrix) # random rotation
             point_set += np.random.normal(0, 0.02, size=point_set.shape) # random jitter
 
-        seg = seg[choice]
+        #seg = seg[choice]
         point_set = torch.from_numpy(point_set)
-        seg = torch.from_numpy(seg)
+        #seg = torch.from_numpy(seg)
         cls = torch.from_numpy(np.array([cls]).astype(np.int64))
 
         if self.classification:
@@ -139,6 +196,9 @@ class ShapeNetDataset(data.Dataset):
 
     def __len__(self):
         return len(self.datapath)
+
+
+
 
 class ModelNetDataset(data.Dataset):
     def __init__(self,
