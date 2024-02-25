@@ -118,12 +118,14 @@ class PointNetfeat(nn.Module):
         pointfeat = x
         x = F.relu(self.bn2(self.conv2(x)))
         x = self.bn3(self.conv3(x))
-        x = torch.max(x, 2, keepdim=True)[0]
-        x = x.view(-1, 1024)
+        x = torch.mean(x, 2, keepdim=True)
+        x_max = torch.max(x, 2, keepdim=False)[0]  # 最大池化
+        x_avg = torch.mean(x, 2)  # 平均池化
+        x = torch.cat((x_max, x_avg), dim=1)  # 拼接最大池化和平均池化的结果
         if self.global_feat:
             return x, trans, trans_feat
         else:
-            x = x.view(-1, 1024, 1).repeat(1, 1, n_pts)
+            x = x.view(-1, 2048, 1).repeat(1, 1, n_pts)
             return torch.cat([x, pointfeat], 1), trans, trans_feat
 
 class PointNetCls(nn.Module):
@@ -131,7 +133,7 @@ class PointNetCls(nn.Module):
         super(PointNetCls, self).__init__()
         self.feature_transform = feature_transform
         self.feat = PointNetfeat(global_feat=True, feature_transform=feature_transform)
-        self.fc1 = nn.Linear(1024, 512)
+        self.fc1 = nn.Linear(2048, 512)
         self.fc2 = nn.Linear(512, 256)
         self.fc3 = nn.Linear(256, k)
         self.dropout = nn.Dropout(p=0.3)

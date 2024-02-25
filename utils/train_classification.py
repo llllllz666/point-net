@@ -42,7 +42,7 @@ if opt.dataset_type == 'shapenet':
         root=opt.dataset,
         classification=True,
         npoints=opt.num_points,
-        sampling_method='fps')
+        sampling_method='voxel_grid')
 
     test_dataset = ShapeNetDataset(
         root=opt.dataset,
@@ -50,7 +50,7 @@ if opt.dataset_type == 'shapenet':
         split='test',
         npoints=opt.num_points,
         data_augmentation=False,
-        sampling_method='fps')
+        sampling_method='voxel_grid')
 
 elif opt.dataset_type == 'modelnet40':
     dataset = ModelNetDataset(

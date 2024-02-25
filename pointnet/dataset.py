@@ -5,9 +5,10 @@ import os.path
 import torch
 import numpy as np
 import sys
-from tqdm import tqdm 
+from tqdm import tqdm
 import json
 from plyfile import PlyData, PlyElement
+
 
 def get_segmentation_classes(root):
     catfile = os.path.join(root, 'synsetoffset2category.txt')
@@ -27,7 +28,7 @@ def get_segmentation_classes(root):
         for fn in fns:
             token = (os.path.splitext(os.path.basename(fn))[0])
             meta[item].append((os.path.join(dir_point, token + '.pts'), os.path.join(dir_seg, token + '.seg')))
-    
+
     with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../misc/num_seg_classes.txt'), 'w') as f:
         for item in cat:
             datapath = []
@@ -43,6 +44,7 @@ def get_segmentation_classes(root):
             print("category {} num segmentation classes {}".format(item, num_seg_classes))
             f.write("{}\t{}\n".format(item, num_seg_classes))
 
+
 def gen_modelnet_id(root):
     classes = []
     with open(os.path.join(root, 'train.txt'), 'r') as f:
@@ -53,6 +55,7 @@ def gen_modelnet_id(root):
         for i in range(len(classes)):
             f.write('{}\t{}\n'.format(classes[i], i))
 
+
 class ShapeNetDataset(data.Dataset):
     def __init__(self,
                  root,
@@ -61,7 +64,7 @@ class ShapeNetDataset(data.Dataset):
                  class_choice=None,
                  split='train',
                  data_augmentation=True,
-                 sampling_method='fps'):
+                 sampling_method='voxel_grid'):
         self.npoints = npoints
         self.root = root
         self.catfile = os.path.join(self.root, 'synsetoffset2category.txt')
@@ -70,12 +73,12 @@ class ShapeNetDataset(data.Dataset):
         self.classification = classification
         self.seg_classes = {}
         self.sampling_method = sampling_method
-        
+
         with open(self.catfile, 'r') as f:
             for line in f:
                 ls = line.strip().split()
                 self.cat[ls[0]] = ls[1]
-        #print(self.cat)
+        # print(self.cat)
         if not class_choice is None:
             self.cat = {k: v for k, v in self.cat.items() if k in class_choice}
 
@@ -83,7 +86,7 @@ class ShapeNetDataset(data.Dataset):
 
         self.meta = {}
         splitfile = os.path.join(self.root, 'train_test_split', 'shuffled_{}_file_list.json'.format(split))
-        #from IPython import embed; embed()
+        # from IPython import embed; embed()
         filelist = json.load(open(splitfile, 'r'))
         for item in self.cat:
             self.meta[item] = []
@@ -91,8 +94,9 @@ class ShapeNetDataset(data.Dataset):
         for file in filelist:
             _, category, uuid = file.split('/')
             if category in self.cat.values():
-                self.meta[self.id2cat[category]].append((os.path.join(self.root, category, 'points', uuid+'.pts'),
-                                        os.path.join(self.root, category, 'points_label', uuid+'.seg')))
+                self.meta[self.id2cat[category]].append((os.path.join(self.root, category, 'points', uuid + '.pts'),
+                                                         os.path.join(self.root, category, 'points_label',
+                                                                      uuid + '.seg')))
 
         self.datapath = []
         for item in self.cat:
@@ -109,17 +113,7 @@ class ShapeNetDataset(data.Dataset):
         print(self.seg_classes, self.num_seg_classes)
 
     def voxel_grid_downsample(self, point_set, voxel_size):
-        """
-        Downsample a point cloud using a voxel grid filter.
-
-        Parameters:
-            point_set (np.array): The original set of points (NxD, where N is the number
-                                  of points and D is the dimensionality, D=3 for point clouds).
-            voxel_size (float): The side length of each voxel in the grid.
-
-        Returns:
-            np.array: The downsampled set of points.
-        """
+        
         # 计算每个点在网格中的索引
         indices = np.floor(point_set / voxel_size).astype(np.int32)
 
@@ -134,17 +128,7 @@ class ShapeNetDataset(data.Dataset):
         return downsampled_points
 
     def farthest_point_sampling(self, point_set, num_samples):
-        """
-        Farthest Point Sampling (FPS) algorithm for subsampling a point cloud.
-
-        Parameters:
-            point_set (np.array): The original set of points (NxD, where N is the number
-                                  of points and D is the dimensionality).
-            num_samples (int): The number of points to sample.
-
-        Returns:
-            np.array: The subsampled set of points (num_samplesxD).
-        """
+        
         N, D = point_set.shape
         sampled_indices = np.zeros(num_samples, dtype=np.int64)
         distances = np.full(N, np.inf)
@@ -164,29 +148,34 @@ class ShapeNetDataset(data.Dataset):
         cls = self.classes[self.datapath[index][0]]
         point_set = np.loadtxt(fn[1]).astype(np.float32)
         seg = np.loadtxt(fn[2]).astype(np.int64)
-        #print(point_set.shape, seg.shape)
+        # print(point_set.shape, seg.shape)
 
         if self.sampling_method == 'voxel_grid':
             point_set = self.voxel_grid_downsample(point_set, voxel_size=0.05)
+            # 确保每个样本具有固定数量的点
+            if len(point_set) != self.npoints:
+                choice = np.random.choice(len(point_set), self.npoints, replace=True)
+                point_set = point_set[choice, :]
+
         elif self.sampling_method == 'fps':
             point_set = self.farthest_point_sampling(point_set, self.npoints)
         elif self.sampling_method == 'random':
             choice = np.random.choice(len(point_set), self.npoints, replace=True)
             point_set = point_set[choice, :]
 
-        point_set = point_set - np.expand_dims(np.mean(point_set, axis = 0), 0) # center
-        dist = np.max(np.sqrt(np.sum(point_set ** 2, axis = 1)),0)
-        point_set = point_set / dist #scale
+        point_set = point_set - np.expand_dims(np.mean(point_set, axis=0), 0)  # center
+        dist = np.max(np.sqrt(np.sum(point_set ** 2, axis=1)), 0)
+        point_set = point_set / dist  # scale
 
         if self.data_augmentation:
-            theta = np.random.uniform(0,np.pi*2)
-            rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],[np.sin(theta), np.cos(theta)]])
-            point_set[:,[0,2]] = point_set[:,[0,2]].dot(rotation_matrix) # random rotation
-            point_set += np.random.normal(0, 0.02, size=point_set.shape) # random jitter
+            theta = np.random.uniform(0, np.pi * 2)
+            rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
+            point_set[:, [0, 2]] = point_set[:, [0, 2]].dot(rotation_matrix)  # random rotation
+            point_set += np.random.normal(0, 0.02, size=point_set.shape)  # random jitter
 
-        #seg = seg[choice]
+        # seg = seg[choice]
         point_set = torch.from_numpy(point_set)
-        #seg = torch.from_numpy(seg)
+        # seg = torch.from_numpy(seg)
         cls = torch.from_numpy(np.array([cls]).astype(np.int64))
 
         if self.classification:
@@ -196,8 +185,6 @@ class ShapeNetDataset(data.Dataset):
 
     def __len__(self):
         return len(self.datapath)
-
-
 
 
 class ModelNetDataset(data.Dataset):
@@ -247,24 +234,24 @@ class ModelNetDataset(data.Dataset):
         cls = torch.from_numpy(np.array([cls]).astype(np.int64))
         return point_set, cls
 
-
     def __len__(self):
         return len(self.fns)
+
 
 if __name__ == '__main__':
     dataset = sys.argv[1]
     datapath = sys.argv[2]
 
     if dataset == 'shapenet':
-        d = ShapeNetDataset(root = datapath, class_choice = ['Chair'])
+        d = ShapeNetDataset(root=datapath, class_choice=['Chair'])
         print(len(d))
         ps, seg = d[0]
-        print(ps.size(), ps.type(), seg.size(),seg.type())
+        print(ps.size(), ps.type(), seg.size(), seg.type())
 
-        d = ShapeNetDataset(root = datapath, classification = True)
+        d = ShapeNetDataset(root=datapath, classification=True)
         print(len(d))
         ps, cls = d[0]
-        print(ps.size(), ps.type(), cls.size(),cls.type())
+        print(ps.size(), ps.type(), cls.size(), cls.type())
         # get_segmentation_classes(datapath)
 
     if dataset == 'modelnet':
@@ -272,4 +259,3 @@ if __name__ == '__main__':
         d = ModelNetDataset(root=datapath)
         print(len(d))
         print(d[0])
-
