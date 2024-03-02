@@ -1,0 +1,37 @@
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_setup.py:_flush():76] Current SDK version is 0.16.2
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_setup.py:_flush():76] Configure stats pid to 923997
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_setup.py:_flush():76] Loading settings from /home/haoran/.config/wandb/settings
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_setup.py:_flush():76] Loading settings from /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/settings
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'utils/train_classification.py', 'program_abspath': '/raid/haoran/Longzan/pointnet.pytorch/utils/train_classification.py', 'program': 'train_classification.py'}
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_init.py:_log_setup():526] Logging user logs to /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_211025-j7mnvv3m/logs/debug.log
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_init.py:_log_setup():527] Logging internal logs to /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_211025-j7mnvv3m/logs/debug-internal.log
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_init.py:init():566] calling init triggers
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'epochs': 50, 'method_for_training': 'random', 'method_for_val': 'random'}
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_init.py:init():616] starting backend
+2024-03-02 21:10:25,780 INFO    MainThread:923997 [wandb_init.py:init():620] setting up manager
+2024-03-02 21:10:25,781 INFO    MainThread:923997 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-03-02 21:10:25,782 INFO    MainThread:923997 [wandb_init.py:init():628] backend started and connected
+2024-03-02 21:10:25,783 INFO    MainThread:923997 [wandb_init.py:init():720] updated telemetry
+2024-03-02 21:10:25,851 INFO    MainThread:923997 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-03-02 21:10:27,269 INFO    MainThread:923997 [wandb_run.py:_on_init():2254] communicating current version
+2024-03-02 21:10:27,944 WARNING MainThread:923997 [wandb_init.py:init():1198] interrupted
+Traceback (most recent call last):
+  File "/home/haoran/.local/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 1176, in init
+    run = wi.init()
+  File "/home/haoran/.local/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 802, in init
+    run._on_init()
+  File "/home/haoran/.local/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 2258, in _on_init
+    version_result = version_handle.wait(timeout=30)
+  File "/home/haoran/.local/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 283, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+  File "/home/haoran/.local/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 130, in _get_and_clear
+    if self._wait(timeout=timeout):
+  File "/home/haoran/.local/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 126, in _wait
+    return self._event.wait(timeout=timeout)
+  File "/home/haoran/anaconda3/envs/pytorch_env/lib/python3.8/threading.py", line 558, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/haoran/anaconda3/envs/pytorch_env/lib/python3.8/threading.py", line 306, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt

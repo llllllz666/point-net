@@ -1,0 +1,21 @@
+2024-03-02 21:10:25,783 INFO    StreamThr :924244 [internal.py:wandb_internal():86] W&B internal server running at pid: 924244, started at: 2024-03-02 21:10:25.782510
+2024-03-02 21:10:25,784 DEBUG   HandlerThread:924244 [handler.py:handle_request():146] handle_request: status
+2024-03-02 21:10:25,786 INFO    WriterThread:924244 [datastore.py:open_for_write():87] open: /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_211025-j7mnvv3m/run-j7mnvv3m.wandb
+2024-03-02 21:10:25,786 DEBUG   SenderThread:924244 [sender.py:send():382] send: header
+2024-03-02 21:10:25,852 DEBUG   SenderThread:924244 [sender.py:send():382] send: run
+2024-03-02 21:10:27,263 INFO    SenderThread:924244 [dir_watcher.py:__init__():211] watching files in: /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_211025-j7mnvv3m/files
+2024-03-02 21:10:27,263 INFO    SenderThread:924244 [sender.py:_start_run_threads():1136] run started: j7mnvv3m with start time 1709385025.782444
+2024-03-02 21:10:27,269 DEBUG   HandlerThread:924244 [handler.py:handle_request():146] handle_request: check_version
+2024-03-02 21:10:27,270 DEBUG   SenderThread:924244 [sender.py:send_request():409] send_request: check_version
+2024-03-02 21:10:27,948 DEBUG   HandlerThread:924244 [handler.py:handle_request():146] handle_request: shutdown
+2024-03-02 21:10:27,949 INFO    HandlerThread:924244 [handler.py:finish():869] shutting down handler
+2024-03-02 21:10:28,270 INFO    WriterThread:924244 [datastore.py:close():296] close: /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_211025-j7mnvv3m/run-j7mnvv3m.wandb
+2024-03-02 21:10:28,987 INFO    SenderThread:924244 [sender.py:finish():1572] shutting down sender
+2024-03-02 21:10:28,987 INFO    SenderThread:924244 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-03-02 21:10:29,264 INFO    SenderThread:924244 [dir_watcher.py:finish():388] scan: /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_211025-j7mnvv3m/files
+2024-03-02 21:10:29,264 INFO    SenderThread:924244 [dir_watcher.py:finish():402] scan save: /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_211025-j7mnvv3m/files/config.yaml config.yaml
+2024-03-02 21:10:29,264 INFO    SenderThread:924244 [file_pusher.py:finish():175] shutting down file pusher
+2024-03-02 21:10:29,264 INFO    SenderThread:924244 [file_pusher.py:join():181] waiting for file pusher
+2024-03-02 21:10:31,149 INFO    wandb-upload_0:924244 [upload_job.py:push():131] Uploaded file /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_211025-j7mnvv3m/files/config.yaml
+2024-03-02 21:10:31,768 INFO    SenderThread:924244 [file_stream.py:finish():595] file stream finish called
+2024-03-02 21:10:38,097 INFO    SenderThread:924244 [file_stream.py:finish():599] file stream finish is done

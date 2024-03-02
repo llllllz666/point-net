@@ -45,7 +45,7 @@ blue = lambda x: '\033[94m' + x + '\033[0m'
 #wandb
 
 # 定义一个包含三个值的列表
-values = ["random", "fps", "voxel_grid"]
+values = ["random", "voxel_grid","fps" ]
 
 # 使用两层嵌套循环来分配不同的值
 for value1 in values:
@@ -55,7 +55,7 @@ for value1 in values:
         print("String 1:", my_string1, "String 2:", my_string2)
         trainAndVal = f"{my_string1}_Train_And_{my_string2}_Val"
         wandb.init(
-            project="pointNet_test",
+            project="PointNet",
             name=trainAndVal,
             config={
                 "epochs": opt.nepoch,
@@ -143,7 +143,6 @@ for value1 in values:
         classifier.cuda()
 
         num_batch = len(dataset) / opt.batchSize
-
         for epoch in range(config.epochs):
             scheduler.step()
             for i, data in enumerate(dataloader, 0):
@@ -166,6 +165,7 @@ for value1 in values:
 
                 metrics = {
                     "accuracy": correct.item() / float(opt.batchSize),
+                    "loss": 1-(correct.item() / float(opt.batchSize)),
                     "train_epoch": epoch,
                 }
                 wandb.log(metrics)
@@ -185,6 +185,7 @@ for value1 in values:
                     epoch, i, num_batch, blue('test'), loss.item(), correct.item() / float(opt.batchSize)))
                     val_metrics = {
                         "val_accuracy": correct.item() / float(opt.batchSize),
+                        "val_loss": 1 - (correct.item() / float(opt.batchSize)),
                         "train_epoch": epoch,
                     }
                     wandb.log(val_metrics)
