@@ -1,0 +1,89 @@
+Random Seed:  1089
+{'Airplane': 0, 'Bag': 1, 'Cap': 2, 'Car': 3, 'Chair': 4, 'Earphone': 5, 'Guitar': 6, 'Knife': 7, 'Lamp': 8, 'Laptop': 9, 'Motorbike': 10, 'Mug': 11, 'Pistol': 12, 'Rocket': 13, 'Skateboard': 14, 'Table': 15}
+{'Airplane': 4, 'Bag': 2, 'Cap': 2, 'Car': 4, 'Chair': 4, 'Earphone': 3, 'Guitar': 3, 'Knife': 2, 'Lamp': 4, 'Laptop': 2, 'Motorbike': 6, 'Mug': 2, 'Pistol': 3, 'Rocket': 3, 'Skateboard': 3, 'Table': 3} 4
+{'Airplane': 0, 'Bag': 1, 'Cap': 2, 'Car': 3, 'Chair': 4, 'Earphone': 5, 'Guitar': 6, 'Knife': 7, 'Lamp': 8, 'Laptop': 9, 'Motorbike': 10, 'Mug': 11, 'Pistol': 12, 'Rocket': 13, 'Skateboard': 14, 'Table': 15}
+{'Airplane': 4, 'Bag': 2, 'Cap': 2, 'Car': 4, 'Chair': 4, 'Earphone': 3, 'Guitar': 3, 'Knife': 2, 'Lamp': 4, 'Laptop': 2, 'Motorbike': 6, 'Mug': 2, 'Pistol': 3, 'Rocket': 3, 'Skateboard': 3, 'Table': 3} 4
+{'Airplane': 0, 'Bag': 1, 'Cap': 2, 'Car': 3, 'Chair': 4, 'Earphone': 5, 'Guitar': 6, 'Knife': 7, 'Lamp': 8, 'Laptop': 9, 'Motorbike': 10, 'Mug': 11, 'Pistol': 12, 'Rocket': 13, 'Skateboard': 14, 'Table': 15}
+{'Airplane': 4, 'Bag': 2, 'Cap': 2, 'Car': 4, 'Chair': 4, 'Earphone': 3, 'Guitar': 3, 'Knife': 2, 'Lamp': 4, 'Laptop': 2, 'Motorbike': 6, 'Mug': 2, 'Pistol': 3, 'Rocket': 3, 'Skateboard': 3, 'Table': 3} 4
+12137 2874
+classes 16
+/home/haoran/.local/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:138: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+[0: 0/379] train loss: 2.749625 accuracy: 0.093750
+[0: 0/379] [94mtest[39m loss: 2.767571 accuracy: 0.062500
+[0: 1/379] train loss: 2.436039 accuracy: 0.343750
+[0: 2/379] train loss: 2.526270 accuracy: 0.281250
+[0: 3/379] train loss: 2.029865 accuracy: 0.375000
+[0: 4/379] train loss: 1.861449 accuracy: 0.593750
+[0: 5/379] train loss: 1.490201 accuracy: 0.781250
+[0: 6/379] train loss: 1.467074 accuracy: 0.593750
+[0: 7/379] train loss: 1.758221 accuracy: 0.468750
+[0: 8/379] train loss: 1.543968 accuracy: 0.562500
+[0: 9/379] train loss: 1.341269 accuracy: 0.656250
+[0: 10/379] train loss: 1.665615 accuracy: 0.500000
+[0: 10/379] [94mtest[39m loss: 2.596442 accuracy: 0.031250
+[0: 11/379] train loss: 1.045696 accuracy: 0.687500
+[0: 12/379] train loss: 0.975294 accuracy: 0.718750
+[0: 13/379] train loss: 1.431027 accuracy: 0.562500
+[0: 14/379] train loss: 1.090645 accuracy: 0.750000
+[0: 15/379] train loss: 0.857028 accuracy: 0.750000
+[0: 16/379] train loss: 1.368478 accuracy: 0.593750
+[0: 17/379] train loss: 1.677555 accuracy: 0.562500
+[0: 18/379] train loss: 1.015363 accuracy: 0.718750
+[0: 19/379] train loss: 1.228315 accuracy: 0.625000
+[0: 20/379] train loss: 1.410269 accuracy: 0.562500
+[0: 20/379] [94mtest[39m loss: 3.221615 accuracy: 0.062500
+[0: 21/379] train loss: 0.899316 accuracy: 0.718750
+[0: 22/379] train loss: 1.373586 accuracy: 0.687500
+[0: 23/379] train loss: 0.813427 accuracy: 0.843750
+[0: 24/379] train loss: 0.974269 accuracy: 0.687500
+[0: 25/379] train loss: 0.777062 accuracy: 0.781250
+[0: 26/379] train loss: 0.962519 accuracy: 0.750000
+[0: 27/379] train loss: 0.915366 accuracy: 0.750000
+[0: 28/379] train loss: 0.845172 accuracy: 0.781250
+[0: 29/379] train loss: 0.397338 accuracy: 0.968750
+[0: 30/379] train loss: 1.108525 accuracy: 0.656250
+[0: 30/379] [94mtest[39m loss: 2.775277 accuracy: 0.093750
+[0: 31/379] train loss: 0.619072 accuracy: 0.843750
+[0: 32/379] train loss: 0.942393 accuracy: 0.781250
+[0: 33/379] train loss: 0.941417 accuracy: 0.781250
+[0: 34/379] train loss: 0.767406 accuracy: 0.781250
+[0: 35/379] train loss: 0.719377 accuracy: 0.781250
+[0: 36/379] train loss: 0.642705 accuracy: 0.781250
+[0: 37/379] train loss: 1.076458 accuracy: 0.718750
+[0: 38/379] train loss: 0.449516 accuracy: 0.843750
+[0: 39/379] train loss: 0.514220 accuracy: 0.875000
+[0: 40/379] train loss: 0.857699 accuracy: 0.718750
+[0: 40/379] [94mtest[39m loss: 1.225817 accuracy: 0.718750
+[0: 41/379] train loss: 0.931138 accuracy: 0.718750
+[0: 42/379] train loss: 0.449464 accuracy: 0.906250
+[0: 43/379] train loss: 0.748733 accuracy: 0.781250
+[0: 44/379] train loss: 0.671627 accuracy: 0.781250
+[0: 45/379] train loss: 0.668153 accuracy: 0.843750
+[0: 46/379] train loss: 0.566017 accuracy: 0.843750
+[0: 47/379] train loss: 0.386005 accuracy: 0.937500
+[0: 48/379] train loss: 1.321630 accuracy: 0.687500
+[0: 49/379] train loss: 0.243567 accuracy: 0.937500
+[0: 50/379] train loss: 0.835616 accuracy: 0.718750
+Traceback (most recent call last):
+  File "train_classification.py", line 174, in <module>
+    j, data = next(enumerate(valdataloader, 0))
+  File "/home/haoran/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "/home/haoran/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 1316, in _next_data
+    idx, data = self._get_data()
+  File "/home/haoran/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 1282, in _get_data
+    success, data = self._try_get_data()
+  File "/home/haoran/.local/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 1120, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+  File "/home/haoran/anaconda3/envs/pytorch_env/lib/python3.8/multiprocessing/queues.py", line 107, in get
+    if not self._poll(timeout):
+  File "/home/haoran/anaconda3/envs/pytorch_env/lib/python3.8/multiprocessing/connection.py", line 257, in poll
+    return self._poll(timeout)
+  File "/home/haoran/anaconda3/envs/pytorch_env/lib/python3.8/multiprocessing/connection.py", line 424, in _poll
+    r = wait([self], timeout)
+  File "/home/haoran/anaconda3/envs/pytorch_env/lib/python3.8/multiprocessing/connection.py", line 931, in wait
+    ready = selector.select(timeout)
+  File "/home/haoran/anaconda3/envs/pytorch_env/lib/python3.8/selectors.py", line 415, in select
+    fd_event_list = self._selector.poll(timeout)
+KeyboardInterrupt

@@ -1,0 +1,25 @@
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Current SDK version is 0.16.2
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Configure stats pid to 924927
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Loading settings from /home/haoran/.config/wandb/settings
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Loading settings from /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/settings
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'utils/train_classification.py', 'program_abspath': '/raid/haoran/Longzan/pointnet.pytorch/utils/train_classification.py', 'program': 'train_classification.py'}
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_init.py:_log_setup():526] Logging user logs to /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_212744-bqfxdteq/logs/debug.log
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_init.py:_log_setup():527] Logging internal logs to /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_212744-bqfxdteq/logs/debug-internal.log
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_init.py:init():566] calling init triggers
+2024-03-02 21:27:44,242 INFO    MainThread:924927 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'epochs': 50, 'method_for_training': 'random', 'method_for_val': 'random'}
+2024-03-02 21:27:44,243 INFO    MainThread:924927 [wandb_init.py:init():611] wandb.init() called when a run is still active
+2024-03-02 21:44:40,365 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Current SDK version is 0.16.2
+2024-03-02 21:44:40,365 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Configure stats pid to 924927
+2024-03-02 21:44:40,365 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Loading settings from /home/haoran/.config/wandb/settings
+2024-03-02 21:44:40,365 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Loading settings from /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/settings
+2024-03-02 21:44:40,365 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-03-02 21:44:40,365 INFO    MainThread:924927 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'utils/train_classification.py', 'program_abspath': '/raid/haoran/Longzan/pointnet.pytorch/utils/train_classification.py', 'program': 'train_classification.py'}
+2024-03-02 21:44:40,366 INFO    MainThread:924927 [wandb_init.py:_log_setup():526] Logging user logs to /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_214440-amgpxaac/logs/debug.log
+2024-03-02 21:44:40,366 INFO    MainThread:924927 [wandb_init.py:_log_setup():527] Logging internal logs to /raid/haoran/Longzan/pointnet.pytorch/utils/wandb/run-20240302_214440-amgpxaac/logs/debug-internal.log
+2024-03-02 21:44:40,366 INFO    MainThread:924927 [wandb_init.py:init():566] calling init triggers
+2024-03-02 21:44:40,366 INFO    MainThread:924927 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'epochs': 50, 'method_for_training': 'random', 'method_for_val': 'random'}
+2024-03-02 21:44:40,366 INFO    MainThread:924927 [wandb_init.py:init():611] wandb.init() called when a run is still active
+2024-03-02 21:49:35,742 WARNING MsgRouterThr:924927 [router.py:message_loop():77] message_loop has been closed

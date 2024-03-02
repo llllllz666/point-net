@@ -114,7 +114,7 @@ class ShapeNetDataset(data.Dataset):
 
     def voxel_grid_downsample(self, point_set, voxel_size):
         """
-        Downsample a point cloud using a voxel grid filter.
+        Downsample a point cloud using a voxel grid filter, ensuring the output has a fixed number of points.
 
         Parameters:
             point_set (np.array): The original set of points (NxD, where N is the number
@@ -122,7 +122,7 @@ class ShapeNetDataset(data.Dataset):
             voxel_size (float): The side length of each voxel in the grid.
 
         Returns:
-            np.array: The downsampled set of points.
+            np.array: The downsampled set of points with a fixed number of points.
         """
         # 计算每个点在网格中的索引
         indices = np.floor(point_set / voxel_size).astype(np.int32)
@@ -131,9 +131,22 @@ class ShapeNetDataset(data.Dataset):
         indices_str = indices.astype(str)
         unique_indices_str, unique_inverse = np.unique(['_'.join(item) for item in indices_str], return_inverse=True)
 
-        # 使用平均值或任意点简化每个体素内的点
-        downsampled_points = np.array(
-            [point_set[unique_inverse == i].mean(axis=0) for i in range(len(unique_indices_str))])
+        # 使用平均值简化每个体素内的点
+        downsampled_points_list = [point_set[unique_inverse == i].mean(axis=0) for i in range(len(unique_indices_str))]
+
+        # 确保输出点云具有固定数量的点
+        if len(downsampled_points_list) > self.npoints:
+            # 如果超出固定点数，随机抽取
+            downsampled_points = np.array(random.sample(downsampled_points_list, self.npoints))
+        elif len(downsampled_points_list) < self.npoints:
+            # 如果不足固定点数，随机复制
+            additional_indices = np.random.choice(len(downsampled_points_list),
+                                                  self.npoints - len(downsampled_points_list), replace=True)
+            additional_points = np.array([downsampled_points_list[idx] for idx in additional_indices])
+            downsampled_points = np.vstack((downsampled_points_list, additional_points))
+        else:
+            # 点数刚好符合，直接使用
+            downsampled_points = np.array(downsampled_points_list)
 
         return downsampled_points
 

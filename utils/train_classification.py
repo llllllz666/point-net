@@ -45,7 +45,7 @@ blue = lambda x: '\033[94m' + x + '\033[0m'
 #wandb
 
 # 定义一个包含三个值的列表
-values = ["random", "voxel_grid","fps" ]
+values = ['voxel_grid','random','fps']
 
 # 使用两层嵌套循环来分配不同的值
 for value1 in values:
@@ -55,7 +55,7 @@ for value1 in values:
         print("String 1:", my_string1, "String 2:", my_string2)
         trainAndVal = f"{my_string1}_Train_And_{my_string2}_Val"
         wandb.init(
-            project="PointNet",
+            project="Point_cloud_nettwork",
             name=trainAndVal,
             config={
                 "epochs": opt.nepoch,
@@ -208,5 +208,6 @@ for value1 in values:
             total_testset += points.size()[0]
 
         print("final accuracy {}".format(total_correct / float(total_testset)))
+        wandb.finish()
 
 
