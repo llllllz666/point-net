@@ -51,7 +51,7 @@ if opt.dataset_type == 'shapenet':
         root=opt.dataset,
         classification=True,
         npoints=opt.num_points,
-        sampling_method='fps')
+        sampling_method='random')
 
     test_dataset = ShapeNetDataset(
         root=opt.dataset,
@@ -59,7 +59,7 @@ if opt.dataset_type == 'shapenet':
         split='test',
         npoints=opt.num_points,
         data_augmentation=False,
-        sampling_method='fps')
+        sampling_method='random')
 
     val_dataset = ShapeNetDataset(
         root=opt.dataset,
@@ -67,7 +67,7 @@ if opt.dataset_type == 'shapenet':
         split='val',
         npoints=opt.num_points,
         data_augmentation=False,
-        sampling_method='fps')
+        sampling_method='random')
 
 elif opt.dataset_type == 'modelnet40':
     dataset = ModelNetDataset(
@@ -123,9 +123,15 @@ classifier.cuda()
 
 num_batch = len(dataset) / opt.batchSize
 
+wandb.init(
+        project="pointNet",
+        name="RandomTrainAndRandomVal",
+        config={
+            "epochs": opt.nepoch,
+            })
+config = wandb.config
 
-
-for epoch in range(opt.nepoch):
+for epoch in range(config.epochs):
     scheduler.step()
     for i, data in enumerate(dataloader, 0):
         points, target = data
@@ -144,6 +150,12 @@ for epoch in range(opt.nepoch):
         correct = pred_choice.eq(target.data).cpu().sum()
         print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch, loss.item(), correct.item() / float(opt.batchSize)))
 
+        metrics = {
+            "accuracy": correct.item() / float(opt.batchSize),
+            "train_epoch": epoch,
+        }
+        wandb.log(metrics)
+
         if i % 10 == 0:
             j, data = next(enumerate(valdataloader, 0))
             points, target = data
@@ -156,8 +168,14 @@ for epoch in range(opt.nepoch):
             pred_choice = pred.data.max(1)[1]
             correct = pred_choice.eq(target.data).cpu().sum()
             print('[%d: %d/%d] %s loss: %f accuracy: %f' % (epoch, i, num_batch, blue('test'), loss.item(), correct.item()/float(opt.batchSize)))
+            val_metrics = {
+                "val_accuracy": correct.item() / float(opt.batchSize),
+                "train_epoch": epoch,
+            }
+            wandb.log(val_metrics)
 
-    torch.save(classifier.state_dict(), '%s/cls_model_%d.pth' % (opt.outf, epoch))
+
+    torch.save(classifier.state_dict(), '%s/Random_Train_And_Random_Val_cls_model_%d.pth' % (opt.outf, epoch))
 
 total_correct = 0
 total_testset = 0

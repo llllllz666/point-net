@@ -64,7 +64,7 @@ class ShapeNetDataset(data.Dataset):
                  class_choice=None,
                  split='train',
                  data_augmentation=True,
-                 sampling_method='voxel_grid'):
+                 sampling_method='random'):
         self.npoints = npoints
         self.root = root
         self.catfile = os.path.join(self.root, 'synsetoffset2category.txt')
@@ -113,7 +113,17 @@ class ShapeNetDataset(data.Dataset):
         print(self.seg_classes, self.num_seg_classes)
 
     def voxel_grid_downsample(self, point_set, voxel_size):
-        
+        """
+        Downsample a point cloud using a voxel grid filter.
+
+        Parameters:
+            point_set (np.array): The original set of points (NxD, where N is the number
+                                  of points and D is the dimensionality, D=3 for point clouds).
+            voxel_size (float): The side length of each voxel in the grid.
+
+        Returns:
+            np.array: The downsampled set of points.
+        """
         # 计算每个点在网格中的索引
         indices = np.floor(point_set / voxel_size).astype(np.int32)
 
@@ -128,7 +138,17 @@ class ShapeNetDataset(data.Dataset):
         return downsampled_points
 
     def farthest_point_sampling(self, point_set, num_samples):
-        
+        """
+        Farthest Point Sampling (FPS) algorithm for subsampling a point cloud.
+
+        Parameters:
+            point_set (np.array): The original set of points (NxD, where N is the number
+                                  of points and D is the dimensionality).
+            num_samples (int): The number of points to sample.
+
+        Returns:
+            np.array: The subsampled set of points (num_samplesxD).
+        """
         N, D = point_set.shape
         sampled_indices = np.zeros(num_samples, dtype=np.int64)
         distances = np.full(N, np.inf)
@@ -152,11 +172,6 @@ class ShapeNetDataset(data.Dataset):
 
         if self.sampling_method == 'voxel_grid':
             point_set = self.voxel_grid_downsample(point_set, voxel_size=0.05)
-            # 确保每个样本具有固定数量的点
-            if len(point_set) != self.npoints:
-                choice = np.random.choice(len(point_set), self.npoints, replace=True)
-                point_set = point_set[choice, :]
-
         elif self.sampling_method == 'fps':
             point_set = self.farthest_point_sampling(point_set, self.npoints)
         elif self.sampling_method == 'random':
