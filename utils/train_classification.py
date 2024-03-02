@@ -11,6 +11,15 @@ from pointnet.model import PointNetCls, feature_transform_regularizer
 import torch.nn.functional as F
 from tqdm import tqdm
 
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("Using GPU:", torch.cuda.get_device_name(0))
+else:
+    device = torch.device("cpu")
+    print("GPU not available, using the CPU instead.")
+
+import wandb
+wandb.login()
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -42,7 +51,7 @@ if opt.dataset_type == 'shapenet':
         root=opt.dataset,
         classification=True,
         npoints=opt.num_points,
-        sampling_method='voxel_grid')
+        sampling_method='fps')
 
     test_dataset = ShapeNetDataset(
         root=opt.dataset,
@@ -50,7 +59,15 @@ if opt.dataset_type == 'shapenet':
         split='test',
         npoints=opt.num_points,
         data_augmentation=False,
-        sampling_method='voxel_grid')
+        sampling_method='fps')
+
+    val_dataset = ShapeNetDataset(
+        root=opt.dataset,
+        classification=True,
+        split='val',
+        npoints=opt.num_points,
+        data_augmentation=False,
+        sampling_method='fps')
 
 elif opt.dataset_type == 'modelnet40':
     dataset = ModelNetDataset(
@@ -79,6 +96,12 @@ testdataloader = torch.utils.data.DataLoader(
         shuffle=True,
         num_workers=int(opt.workers))
 
+valdataloader = torch.utils.data.DataLoader(
+        val_dataset,
+        batch_size=opt.batchSize,
+        shuffle=True,
+        num_workers=int(opt.workers))
+
 print(len(dataset), len(test_dataset))
 num_classes = len(dataset.classes)
 print('classes', num_classes)
@@ -100,6 +123,8 @@ classifier.cuda()
 
 num_batch = len(dataset) / opt.batchSize
 
+
+
 for epoch in range(opt.nepoch):
     scheduler.step()
     for i, data in enumerate(dataloader, 0):
@@ -120,7 +145,7 @@ for epoch in range(opt.nepoch):
         print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch, loss.item(), correct.item() / float(opt.batchSize)))
 
         if i % 10 == 0:
-            j, data = next(enumerate(testdataloader, 0))
+            j, data = next(enumerate(valdataloader, 0))
             points, target = data
             target = target[:, 0]
             points = points.transpose(2, 1)

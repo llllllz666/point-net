@@ -1,0 +1,14 @@
+wandb_version: 1
+
+batch_size:
+  value: 64
+epochs:
+  value: 8
+gamma:
+  value: 0.41204073938384367
+learning_rate:
+  value: 0.005463834184493588
+step_Size:
+  value: 14
+workers:
+  value: 2

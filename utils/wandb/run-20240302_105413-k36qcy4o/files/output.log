@@ -1,0 +1,21 @@
+/home/haoran/.local/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:138: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+[34m[1mwandb[39m[22m: Ctrl + C detected. Stopping sweep.
+Traceback (most recent call last):
+  File "train_classification.py", line 187, in train
+    avg_accu = train_epo(dataloader, valdataloader, classifier, optimizer, scheduler)
+  File "train_classification.py", line 202, in train_epo
+    pred, trans, trans_feat = classifier(points)
+  File "/home/haoran/.local/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/raid/haoran/Longzan/pointnet.pytorch/pointnet/model.py", line 145, in forward
+    x, trans, trans_feat = self.feat(x)
+  File "/home/haoran/.local/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/raid/haoran/Longzan/pointnet.pytorch/pointnet/model.py", line 104, in forward
+    trans = self.stn(x)
+  File "/home/haoran/.local/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/raid/haoran/Longzan/pointnet.pytorch/pointnet/model.py", line 43, in forward
+    iden = iden.cuda()
+Exception
